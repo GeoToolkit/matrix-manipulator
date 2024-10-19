@@ -1,5 +1,8 @@
 package com.geo.toolkit;
 
+/**
+ * Class for matrix operations.
+ */
 public class Matrix {
 
   private double[][] elements;
@@ -29,6 +32,10 @@ public class Matrix {
     return new Matrix(sum);
   }
 
+
+  /**
+   * Uses defined precision for comparison of double values.
+   */
   @Override
   public boolean equals(Object incomingMatrix) {
     if (this == incomingMatrix) {
