@@ -2,22 +2,22 @@ package com.geo.toolkit;
 
 public class Matrix {
 
-  private int[][] elements;
+  private double[][] elements;
   private int order;
 
   public Matrix(int order) {
-    elements = new int[order][order];
+    elements = new double[order][order];
     this.order = order;
   }
 
-  public Matrix( int[][] elements) {
+  public Matrix( double[][] elements) {
     this.elements = elements;
     this.order = elements.length;
   }
 
   public Matrix add(Matrix matrix) {
     int order = matrix.order;
-    int[][] sum = new int[order][order];
+    double[][] sum = new double[order][order];
 
     for (int i = 0; i < order; i++) {
       for (int j = 0; j < order; j++) {
@@ -49,11 +49,11 @@ public class Matrix {
     return true;
   }
 
-  public int[][] getElements() {
+  public double[][] getElements() {
     return elements;
   }
 
-  public void setElements(int[][] elements) {
+  public void setElements(double[][] elements) {
     this.elements = elements;
   }
 
