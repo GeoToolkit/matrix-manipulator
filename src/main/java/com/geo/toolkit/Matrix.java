@@ -5,6 +5,8 @@ public class Matrix {
   private double[][] elements;
   private int order;
 
+  private final double precision = 1e-14;
+
   public Matrix(int order) {
     elements = new double[order][order];
     this.order = order;
@@ -40,7 +42,7 @@ public class Matrix {
     boolean result;
     for (int i = 0; i < order; i++) {
       for (int j = 0; j < order; j++) {
-        result = this.elements[i][j] == matrix.elements[i][j];
+        result = Math.abs(this.elements[i][j] - matrix.elements[i][j]) < precision;
         if(!result) {
           return false;
         }
