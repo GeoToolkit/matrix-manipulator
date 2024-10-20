@@ -1,5 +1,7 @@
 package com.geo.toolkit;
 
+import java.security.InvalidAlgorithmParameterException;
+
 /**
  * Class for matrix operations.
  */
@@ -32,6 +34,22 @@ public class Matrix {
     return new Matrix(sum);
   }
 
+  public Matrix multiply(Matrix matrix) throws InvalidAlgorithmParameterException {
+    if( order != matrix.getOrder()) {
+      throw new InvalidAlgorithmParameterException();
+    }
+    int order = matrix.order;
+    double[][] product = new double[order][order];
+
+    for (int i = 0; i < order; i++) {
+      for (int j = 0; j < order; j++) {
+        for( int k = 0; k < order; k++) {
+          product[i][j] += this.elements[i][k] * matrix.elements[k][j];
+        }
+      }
+    }
+    return new Matrix(product);
+  }
 
   /**
    * Uses defined precision for comparison of double values.
@@ -56,6 +74,17 @@ public class Matrix {
       }
     }
     return true;
+  }
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    for(int i = 0; i < order; i++) {
+      for (int j = 0; j < order; j++) {
+        sb.append(String.format("%e",elements[i][j])).append(" ");
+      }
+      sb.append("\n");
+    }
+    return sb.toString();
   }
 
   public double[][] getElements() {
