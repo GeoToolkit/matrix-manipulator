@@ -4,21 +4,42 @@ import java.security.InvalidAlgorithmParameterException;
 
 public class CholetskiyDecompossitor {
 
-  public double[] forwardSubstitution(double[] triangleElements, double[] vectorB)
+
+  public double[] forwardSubstitution(double[] lowTriangleElements, double[] vectorB)
       throws InvalidAlgorithmParameterException {
-    if (findElementsAmountOfTriangleMatrixByItsOrder(vectorB.length) != triangleElements.length) {
+    if (findElementsAmountOfTriangleMatrixByItsOrder(vectorB.length) != lowTriangleElements.length) {
       throw new InvalidAlgorithmParameterException("size of matrices are inappropriate");
     }
     double[] result = new double[vectorB.length];
 
-    result[0] = vectorB[0] / triangleElements[0];
+    result[0] = vectorB[0] / lowTriangleElements[0];
 
     for (int n = 1; n < vectorB.length; n++) {
       double sum = 0;
       for (int k = 0; k < n; k++) {
-        sum += triangleElements[transformTriangleMatrixIndexesToLinearArrayIndex(n, k)] * result[k];
+        sum += lowTriangleElements[transformTriangleMatrixIndexesToLinearArrayIndex(n, k)] * result[k];
       }
-      result[n] = (vectorB[n] - sum) / triangleElements[transformTriangleMatrixIndexesToLinearArrayIndex(n, n)];
+      result[n] = (vectorB[n] - sum) / lowTriangleElements[transformTriangleMatrixIndexesToLinearArrayIndex(n, n)];
+    }
+    return result;
+  }
+
+  public double[] backwardSubstitution(double[] lowTriangleElements, double[] vectorB)
+      throws InvalidAlgorithmParameterException {
+    if (findElementsAmountOfTriangleMatrixByItsOrder(vectorB.length) != lowTriangleElements.length) {
+      throw new InvalidAlgorithmParameterException("size of matrices are inappropriate");
+    }
+    int numberOfLastElementOfVectorB = vectorB.length - 1;
+    double[] result = new double[vectorB.length];
+
+    result[numberOfLastElementOfVectorB] = vectorB[numberOfLastElementOfVectorB] / lowTriangleElements[transformTriangleMatrixIndexesToLinearArrayIndex(numberOfLastElementOfVectorB, numberOfLastElementOfVectorB)];
+
+    for (int n = numberOfLastElementOfVectorB - 1; n >= 0; n--) {
+      double sum = 0;
+      for (int k = n; k <= numberOfLastElementOfVectorB; k++) {
+        sum += lowTriangleElements[transformTriangleMatrixIndexesToLinearArrayIndex(k, n)] * result[k];
+      }
+      result[n] = (vectorB[n] - sum) / lowTriangleElements[transformTriangleMatrixIndexesToLinearArrayIndex(n, n)];
     }
     return result;
   }
@@ -58,6 +79,17 @@ public class CholetskiyDecompossitor {
 
     }
     return linearDecomposedTriangleMatrixArray;
+  }
+
+  public double[] solveLinearEquations(Matrix matrixA, double[] vectorY)
+      throws InvalidAlgorithmParameterException {
+    CholetskiyDecompossitor decompossitor = new CholetskiyDecompossitor();
+    double[] lowTriangleElements = decompossitor.getDecomposedTriangleMatrixElementsInFormOfLinearArrayFromSymmetricMatrix(
+        matrixA);
+
+    double[] intermediateResult = decompossitor.forwardSubstitution(lowTriangleElements, vectorY);
+    return decompossitor.backwardSubstitution(lowTriangleElements, intermediateResult);
+
   }
 
 }
