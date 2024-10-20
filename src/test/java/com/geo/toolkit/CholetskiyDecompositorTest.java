@@ -1,11 +1,23 @@
 package com.geo.toolkit;
 
-import java.util.Arrays;
+import java.security.InvalidAlgorithmParameterException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class CholetskiyDecompositorTest {
 
+  @Test
+  void forwardSubstitution_whenTriangleElementsAndVectorBAreReceived_thenResultIsReturned()
+      throws InvalidAlgorithmParameterException {
+    CholetskiyDecompossitor decompossitor = new CholetskiyDecompossitor();
+    double[] triangleElements = {1.0, 2.0, 4.0, 1.0, 3.0, 1.0};
+    double[] vectorB = {3.0, 14.0, 13.0};
+
+    double[] actual = decompossitor.forwardSubstitution(triangleElements, vectorB);
+    double[] expected = {3.0, 2.0, 4.0};
+
+    Assertions.assertArrayEquals(expected, actual);
+  }
   @Test
   void findElementsAmountOfTriangleMatrixByItsOrder_whenTriangleMatrixOrderIsReceived_thenAmountOfElementsIsReturned() {
     CholetskiyDecompossitor decompossitor = new CholetskiyDecompossitor();

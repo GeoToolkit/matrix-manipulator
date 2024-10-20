@@ -1,9 +1,26 @@
 package com.geo.toolkit;
 
+import java.security.InvalidAlgorithmParameterException;
+
 public class CholetskiyDecompossitor {
 
-  public Matrix decomposeSymetricMatrix(Matrix symetricMatrix) {
-    return null;
+  public double[] forwardSubstitution(double[] triangleElements, double[] vectorB)
+      throws InvalidAlgorithmParameterException {
+    if (findElementsAmountOfTriangleMatrixByItsOrder(vectorB.length) != triangleElements.length) {
+      throw new InvalidAlgorithmParameterException("size of matrices are inappropriate");
+    }
+    double[] result = new double[vectorB.length];
+
+    result[0] = vectorB[0] / triangleElements[0];
+
+    for (int n = 1; n < vectorB.length; n++) {
+      double sum = 0;
+      for (int k = 0; k < n; k++) {
+        sum += triangleElements[transformTriangleMatrixIndexesToLinearArrayIndex(n, k)] * result[k];
+      }
+      result[n] = (vectorB[n] - sum) / triangleElements[transformTriangleMatrixIndexesToLinearArrayIndex(n, n)];
+    }
+    return result;
   }
 
   public int transformTriangleMatrixIndexesToLinearArrayIndex(int n, int m) {

@@ -36,7 +36,7 @@ public class Matrix {
 
   public Matrix multiply(Matrix matrix) throws InvalidAlgorithmParameterException {
     if( order != matrix.getOrder()) {
-      throw new InvalidAlgorithmParameterException();
+      throw new InvalidAlgorithmParameterException("size of matrices are inappropriate");
     }
     int order = matrix.order;
     double[][] product = new double[order][order];
